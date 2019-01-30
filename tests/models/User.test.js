@@ -3,7 +3,7 @@ require('../../lib/utils/connect')();
 const mongoose = require('mongoose');
 const { Types } = require('mongoose');
 const User = require('../../lib/models/User');
-// const { tokenize, untokenize } = require('../../lib/utils/token');
+const { tokenize, untokenize } = require('../../lib/utils/token');
 
 describe('User model', () => {
   beforeEach(done => {
@@ -57,5 +57,41 @@ describe('User model', () => {
         expect(res).toBeTruthy;
       });
   });
-  
+  it('has a required username', () => {
+    const user = new User({});
+    const errors = user.validateSync().errors;
+    expect(errors.username.message).toEqual('Path `username` is required.');
+  });
+
+  it('can find a user by token and removes passwordHash and version', () => {
+    const user = new User({
+      username: 'Bill',
+      password: 'password', 
+      profilePhotoUrl: 'https://images-na.ssl-images-amazon.com/images/I/51ivptfSjlL.jpg'
+    });
+    return user.save()
+      .then(user => {
+        return tokenize(user);
+      })
+      .then(token => {
+        return User.findByToken(token);
+      })
+      .then(user => {
+        expect(user).toEqual({ username: 'Bill', _id: expect.any(String), profilePhotoUrl: expect.any(String) });
+      });
+  });
+  it('returns a token', () => {
+    const user = new User({
+      username: 'Bill',
+      password: 'password', 
+      profilePhotoUrl: 'https://images-na.ssl-images-amazon.com/images/I/51ivptfSjlL.jpg'
+    });
+    return user.save()
+      .then(user => {
+        return user.authToken();
+      })
+      .then(token => {
+        expect(token).toEqual(expect.any(String));
+      });
+  });
 });
