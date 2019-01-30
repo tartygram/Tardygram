@@ -1,7 +1,7 @@
 require('dotenv').config();
 require('../../lib/utils/connect');
 const mongoose = require('mongoose');
-const { Types } = require('mongoose');
+// const { Types } = require('mongoose');
 const User = require('../../lib/models/User');
 // const { tokenize, untokenize } = require('../../lib/utils/token');
 
@@ -10,11 +10,11 @@ describe('User model', () => {
     mongoose.connection.dropDatabase(done);
   });
 
-  it('validates a good modell', () => {
+  it('validates a good model', () => {
     const user = new User({
       username: 'Bill'
     });
-    expect(user.toJSON()).toEqual({ username: 'Bill', id: expect.any(Types.ObjectId) });
+    expect(user.toJSON()).toEqual({ username: 'Bill', id: expect.any(String) });
   });
 
   it('has a required passwordHash', () => {
@@ -29,4 +29,18 @@ describe('User model', () => {
         expect(user.profilePhotoUrl).toEqual(expect.any(String));
       });
   });
+
+  // it('compares clear to hashedPassword', () => {
+  //   const user = new User({
+  //     username: 'Bill',
+  //     password: 'password',
+  //   });
+  //   return user.save()
+  //     .then(user => {
+  //       return user.compare('password');
+  //     })
+  //     .then(res => {
+  //       expect(res).toBeTruthy;
+  //     });
+  // });
 });
