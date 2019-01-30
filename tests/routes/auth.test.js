@@ -41,7 +41,7 @@ describe('auth route testing', () => {
       });
   });
 
-  it('can sign in', () => {
+  it.only('can sign in', () => {
     return createUser('Bill')
       .then(() => {
         return request(app)
@@ -54,6 +54,7 @@ describe('auth route testing', () => {
               user: {
                 _id: expect.any(String),
                 username: 'Bill',
+                profilePhotoUrl: 'string'
               },
               token: expect.any(String)
             });
