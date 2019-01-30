@@ -41,7 +41,7 @@ describe('auth route testing', () => {
       });
   });
 
-  it.only('can sign in', () => {
+  it('can sign in', () => {
     return createUser('Bill')
       .then(() => {
         return request(app)
@@ -69,7 +69,8 @@ describe('auth route testing', () => {
           .post('/auth/signin')
           .send({
             username: 'Bill',
-            password: 'badPassword'
+            password: 'badPassword',
+            profilePhotoUrl: 'string'
           });
       })
       .then(res => {
@@ -77,14 +78,15 @@ describe('auth route testing', () => {
       });
   });
 
-  it('can not /signin a user with bad email', () => {
-    return createUser('Bill')
+  it('can not /signin a user with bad username', () => {
+    return createUser('Jack')
       .then(() => {
         return request(app)
           .post('/auth/signin')
           .send({
             username: 'Bill',
-            password: 'password'
+            password: 'password',
+            profilePhotoUrl: 'string'
           });
       })
       .then(res => {
@@ -99,7 +101,8 @@ describe('auth route testing', () => {
           .post('/auth/signin')
           .send({
             username: 'Bill',
-            password: 'password'
+            password: 'password',
+            profilePhotoUrl: 'string'
           })
           .then(res => res.body.token);
       })
@@ -111,7 +114,8 @@ describe('auth route testing', () => {
       .then(res => {
         expect(res.body).toEqual({
           username: 'Bill',
-          _id: expect.any(String)
+          _id: expect.any(String),
+          profilePhotoUrl: 'string'
         });
       });
   });
