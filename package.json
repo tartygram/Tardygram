@@ -1,0 +1,42 @@
+{
+  "name": "Tardygram",
+  "version": "1.0.0",
+  "description": "Tartygram",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest --verbose --runInBand",
+    "start": "nodemon server.js",
+    "test:watch": "jest --watch --verbose --runInBand",
+    "lint": "eslint .",
+    "pretest": "npm run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tartygram/Tardygram.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tartygram/Tardygram/issues"
+  },
+  "homepage": "https://github.com/tartygram/Tardygram#readme",
+  "devDependencies": {
+    "eslint": "^5.12.1",
+    "jest": "^24.0.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "chance": "^1.0.18",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.4.8",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.9"
+  }
+}
