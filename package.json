@@ -14,6 +14,9 @@
     "lint": "eslint .",
     "pretest": "npm run lint"
   },
+  "jest": {
+    "testEnvironment": "node"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tartygram/Tardygram.git"
