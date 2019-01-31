@@ -2,7 +2,7 @@ require('dotenv').config();
 require('../../lib/utils/connect')();
 const mongoose = require('mongoose');
 // const { Types } = require('mongoose');
-// const Post = require('../../lib/models/Post');
+const Post = require('../../lib/models/Post');
 const User = require('../../lib/models/User');
 const request = require('supertest');
 const app = require('../../lib/app');
@@ -13,18 +13,18 @@ const createUser = (username, password, profilePhotoUrl) => {
     .then(user => ({ ...user, _id: user._id.toString() }));
 };
 
-// const createPost = (username, photoUrl, caption, tags) => {
-//   return createUser(username, 'password', 'string')
-//     .then(user => {
-//       return Post({ 
-//         username: user._id,
-//         photoUrl: 'string',
-//         caption: 'string',
-//         tags: ['tag1', 'tag2', 'tag3']
-//       })
-//         .then(post => ({ ...post, _id: post._id.toString() })); 
-//     });
-// };
+const createPost = (username) => {
+  return createUser(username, 'password', 'string')
+    .then(user => {
+      return Post.create({ 
+        user: user._id,
+        photoUrl: 'string',
+        caption: 'string',
+        tags: ['tag1', 'tag2', 'tag3']
+      })
+        .then(post => ({ ...post, _id: post._id.toString() })); 
+    });
+};
 
 describe('Post model', () => {
   beforeEach(done => {
@@ -34,14 +34,13 @@ describe('Post model', () => {
     mongoose.connection.close(done);
   });
 
-  it('can post', () => {
+  it('can post a post', () => {
     return createUser('Bill', 'password', 'string')
       .then(user => {
         return request(app)
           .post('/auth/signin')
           .send({ username: 'Bill', password: 'password', profilePhotoUrl: 'string' })
           .then(res => {
-            console.log('RES', res.body);
             return request(app)
               .post('/posts')
               .set('Authorization', `Bearer ${res.body.token}`)
@@ -62,6 +61,17 @@ describe('Post model', () => {
                 });
               });
           });
+      });
+  });
+
+  it('get a list of posts', () => {
+    return Promise.all(['billybob1', 'billybob2', 'Bill'].map(createPost())
+      .then(() => {
+        return request(app)
+          .get('/posts');
+      }))
+      .then(res => {
+        expect(res.body).toHaveLength(3);
       });
   });
 });
