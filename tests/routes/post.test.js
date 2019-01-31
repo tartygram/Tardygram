@@ -6,6 +6,7 @@ const Post = require('../../lib/models/Post');
 const User = require('../../lib/models/User');
 const request = require('supertest');
 const app = require('../../lib/app');
+const { getToken } = require('../dataHelper');
 
 const createUser = (username, password, profilePhotoUrl) => {
   return User
@@ -40,12 +41,12 @@ describe('Post model', () => {
         return request(app)
           .post('/auth/signin')
           .send({ username: 'Bill', password: 'password', profilePhotoUrl: 'string' })
-          .then(res => {
+          .then(() => {
             return request(app)
               .post('/posts')
-              .set('Authorization', `Bearer ${res.body.token}`)
+              .set('Authorization', `Bearer ${getToken()}`)
               .send({
-                username: user._id,
+                user: user._id,
                 caption: 'Great Post',
                 photoUrl: 'string',
                 tags: ['tag1', 'tag2', 'tag3']
@@ -65,13 +66,14 @@ describe('Post model', () => {
   });
 
   it('get a list of posts', () => {
-    return Promise.all(['billybob1', 'billybob2', 'Bill'].map(createPost())
+    return Promise.all(['billybob1', 'billybob2', 'Bill'].map(createPost))
       .then(() => {
         return request(app)
-          .get('/posts');
-      }))
+          .get('/posts')
+          .set('Authorization', `Bearer ${getToken()}`);
+      })
       .then(res => {
-        expect(res.body).toHaveLength(3);
+        expect(res.body).toEqual(123);
       });
   });
 });
