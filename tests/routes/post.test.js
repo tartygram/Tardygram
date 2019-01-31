@@ -38,23 +38,29 @@ describe('Post model', () => {
     return createUser('Bill', 'password', 'string')
       .then(user => {
         return request(app)
-          .post('/posts')
-          .send({
-            username: user._id,
-            caption: 'Great Post',
-            photoUrl: 'string',
-            tags: ['tag1', 'tag2', 'tag3']
-          })
+          .post('/auth/signin')
+          .send({ username: 'Bill', password: 'password', profilePhotoUrl: 'string' })
           .then(res => {
-            console.log(res.body);
-            expect(res.body).toEqual({
-              username: expect.any(String),
-              caption: 'Great Post',
-              photoUrl: expect.any(String),
-              tags: ['tag1', 'tag2', 'tag3'],
-              _id: expect.any(String),
-              __v: 0
-            });
+            console.log('RES', res.body);
+            return request(app)
+              .post('/posts')
+              .set('Authorization', `Bearer ${res.body.token}`)
+              .send({
+                username: user._id,
+                caption: 'Great Post',
+                photoUrl: 'string',
+                tags: ['tag1', 'tag2', 'tag3']
+              })
+              .then(res => {
+                expect(res.body).toEqual({
+                  user: expect.any(String),
+                  caption: 'Great Post',
+                  photoUrl: expect.any(String),
+                  tags: ['tag1', 'tag2', 'tag3'],
+                  _id: expect.any(String),
+                  __v: 0
+                });
+              });
           });
       });
   });
