@@ -1,33 +1,14 @@
 require('dotenv').config();
 require('../../lib/utils/connect')();
-// const mongoose = require('mongoose');
-// const { Types } = require('mongoose');
-// const Post = require('../../lib/models/Post');
-// const User = require('../../lib/models/User');
+const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
 const { getToken, getPost } = require('../dataHelper');
 
-// const createUser = (username, password, profilePhotoUrl) => {
-//   return User
-//     .create({ username, password, profilePhotoUrl })
-//     .then(user => ({ ...user, _id: user._id.toString() }));
-// };
-
-// const createPost = (username) => {
-//   return createUser(username, 'password', 'string')
-//     .then(user => {
-//       return Post.create({ 
-//         user: user._id,
-//         photoUrl: 'string',
-//         caption: 'string',
-//         tags: ['tag1', 'tag2', 'tag3']
-//       })
-//         .then(post => ({ ...post, _id: post._id.toString() })); 
-//     });
-// };
-
 describe('Post model', () => {
+  afterAll(done => {
+    mongoose.connection.close(done);
+  });
 
   it('can post a post', () => {
     return request(app)
@@ -61,7 +42,6 @@ describe('Post model', () => {
   it('can get a post by id', () => {
     return getPost()
       .then(post => {
-        // console.log('POST', post);
         return request(app)
           .get(`/posts/${post._id}`);
       })

@@ -1,15 +1,21 @@
 require('dotenv').config();
 require('../../lib/utils/connect')();
-const { Types } = require('mongoose');
+const mongoose = require('mongoose');
 const Post = require('../../lib/models/Post');
 describe('post model', () => {
+  afterAll(done => {
+    mongoose.connection.close(done);
+  });
+
   it('validates a good post model', () => {
-    const post = new Post({
+    const post = {
       caption: 'Great Post',
       photoUrl: 'string',
       tags: ['tag1', 'tag2', 'tag3']
-    });
-    expect(post).toEqual({
+    };
+    const newPost = new Post(post);
+    const jsonPost = newPost.toJSON();
+    expect(jsonPost).toEqual({
       caption: 'Great Post',
       photoUrl: 'string',
       tags: ['tag1', 'tag2', 'tag3'],
