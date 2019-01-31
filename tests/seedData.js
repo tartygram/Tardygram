@@ -14,7 +14,7 @@ module.exports = ({ totalUsers = DEFAULT_TOTAL_USERS, totalPosts = DEFAULT_TOTAL
       return Promise.all(
         [...Array(totalPosts)].map(() => {
           return Post.create({
-            user: users._id,
+            user: chance.pickone(users)._id,
             caption: chance.sentence(),
             photoUrl: 'string',
             tags: ['tag1', 'tag2', 'tag3']

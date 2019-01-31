@@ -16,16 +16,16 @@ beforeEach(done => {
 });
 
 beforeEach(() => {
-  return seedData({ totalUsers: 3, totalTweets: 5 });
+  return seedData({ totalUsers: 3, totalPosts: 5 });
 });
 
 let token;
 beforeEach(() => {
-  return User.findOne({ username: 'seed1@test.com' })
+  return User.findOne({ username: 'Bill0' })
     .then(user => {
       return request(app)
         .post('/auth/signin')
-        .send({ user: user.username, password: 'password', profilePhotoUrl: 'string' });
+        .send({ username: user.username, password: 'password' });
     })
     .then(res => {
       token = res.body.token;

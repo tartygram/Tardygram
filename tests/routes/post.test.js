@@ -36,32 +36,23 @@ describe('Post model', () => {
   });
 
   it('can post a post', () => {
-    return createUser('Bill', 'password', 'string')
-      .then(user => {
-        return request(app)
-          .post('/auth/signin')
-          .send({ username: 'Bill', password: 'password', profilePhotoUrl: 'string' })
-          .then(() => {
-            return request(app)
-              .post('/posts')
-              .set('Authorization', `Bearer ${getToken()}`)
-              .send({
-                user: user._id,
-                caption: 'Great Post',
-                photoUrl: 'string',
-                tags: ['tag1', 'tag2', 'tag3']
-              })
-              .then(res => {
-                expect(res.body).toEqual({
-                  user: expect.any(String),
-                  caption: 'Great Post',
-                  photoUrl: expect.any(String),
-                  tags: ['tag1', 'tag2', 'tag3'],
-                  _id: expect.any(String),
-                  __v: 0
-                });
-              });
-          });
+    return request(app)
+      .post('/posts')
+      .set('Authorization', `Bearer ${getToken()}`)
+      .send({
+        caption: 'Great Post',
+        photoUrl: 'string',
+        tags: ['tag1', 'tag2', 'tag3']
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          user: expect.any(String),
+          caption: 'Great Post',
+          photoUrl: expect.any(String),
+          tags: ['tag1', 'tag2', 'tag3'],
+          _id: expect.any(String),
+          __v: 0
+        });
       });
   });
 
@@ -73,7 +64,7 @@ describe('Post model', () => {
           .set('Authorization', `Bearer ${getToken()}`);
       })
       .then(res => {
-        expect(res.body).toEqual(123);
+        expect(res.body).toHaveLength(3);
       });
   });
 });
