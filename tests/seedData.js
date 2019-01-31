@@ -23,27 +23,23 @@ module.exports = ({
     .then(users => {
       return Promise.all([
         Promise.resolve(users),
-        [...Array(totalPosts)].map(() => {
+        Promise.all([...Array(totalPosts)].map(() => {
           return Post.create({
             user: chance.pickone(users)._id,
             caption: chance.sentence(),
             photoUrl: 'string',
             tags: ['tag1', 'tag2', 'tag3']
           });
-        })
+        }))
       ]);
     })
     .then(([users, posts]) => {
-      console.log('****USERS****', users);
-      console.log('****POSTS****', posts);
-      return Promise.all(
-        [...Array(totalComments)].map(() => {
-          return Comment.create({
-            commentBy: chance.pickone(users)._id,
-            post: chance.pickone(posts)._id,
-            comment: 'Nice Photo'
-          });
-        })
-      );
+      return Promise.all([...Array(totalComments)].map(() => {
+        return Comment.create({
+          comment: 'string',
+          commentBy: chance.pickone(users)._id,
+          post: chance.pickone(posts)._id
+        });
+      }));
     });
 };
