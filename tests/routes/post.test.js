@@ -67,4 +67,22 @@ describe('Post model', () => {
         expect(res.body).toHaveLength(3);
       });
   });
+  it('can get a post by id', () => {
+    return createPost('billybob')
+      .then(post => {
+        // console.log('POST', post);
+        return request(app)
+          .get(`/posts/${post._id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({ 
+          user: expect.any(String),
+          photoUrl: 'string',
+          caption: 'string',
+          tags: ['tag1', 'tag2', 'tag3'],
+          __v: 0,
+          _id: expect.any(String)
+        });
+      });
+  });
 });
