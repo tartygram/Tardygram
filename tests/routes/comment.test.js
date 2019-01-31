@@ -3,7 +3,7 @@ require('../../lib/utils/connect')();
 // const mongoose = require('mongoose');
 const request = require('supertest');
 const app = require('../../lib/app');
-const { getToken, getPost } = require('../dataHelper');
+const { getToken, getPost, getComment } = require('../dataHelper');
 
 
 describe('comment model', () => {
@@ -28,5 +28,18 @@ describe('comment model', () => {
             });
           });
       });
+  });
+  it('can delete a comment by id', () => {
+    return getComment()
+      .then(comment => {
+        return request(app)
+          .delete(`/comments/${comment._id}`)
+          .set('Authorization', `Bearer ${getToken()}`);
+
+      })
+      .then(res => {
+        expect(res.body).toEqual({ deleted: 1 });
+      });
+
   });
 });

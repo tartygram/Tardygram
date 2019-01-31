@@ -61,6 +61,7 @@ describe('Post model', () => {
       .then(post => {
         return request(app)
           .patch(`/posts/${post._id}`)
+          .set('Authorization', `Bearer ${getToken()}`)
           .send({ caption: 'HELLO PEOPLE' });
       })
       .then(res => {
@@ -79,7 +80,9 @@ describe('Post model', () => {
     return getPost()
       .then(post => {
         return request(app)
-          .delete(`/posts/${post._id}`);
+          .delete(`/posts/${post._id}`)
+          .set('Authorization', `Bearer ${getToken()}`)
+
       })
       .then(res => {
         expect(res.body).toEqual({ deleted: 1 });
