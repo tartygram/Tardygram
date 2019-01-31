@@ -21,7 +21,8 @@ module.exports = ({
     }))
   )
     .then(users => {
-      return Promise.all(
+      return Promise.all([
+        Promise.resolve(users),
         [...Array(totalPosts)].map(() => {
           return Post.create({
             user: chance.pickone(users)._id,
@@ -30,17 +31,19 @@ module.exports = ({
             tags: ['tag1', 'tag2', 'tag3']
           });
         })
-      );
+      ]);
     })
-    .then(posts => {
+    .then(([users, posts]) => {
+      console.log('****USERS****', users);
+      console.log('****POSTS****', posts);
       return Promise.all(
         [...Array(totalComments)].map(() => {
           return Comment.create({
             commentBy: chance.pickone(users)._id,
             post: chance.pickone(posts)._id,
-            comment: 'Nice Photo',
-          })
+            comment: 'Nice Photo'
+          });
         })
-      )
-    })
+      );
+    });
 };
