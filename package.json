@@ -8,7 +8,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "jest --verbose --runInBand",
+    "test": "jest --verbose --runInBand --detectOpenHandles",
     "start": "nodemon server.js",
     "test:watch": "jest --watch --verbose --runInBand",
     "lint": "eslint .",

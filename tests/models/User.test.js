@@ -1,19 +1,9 @@
-require('dotenv').config();
-require('../../lib/utils/connect')();
-const mongoose = require('mongoose');
+require('../dataHelper');
 const { Types } = require('mongoose');
 const User = require('../../lib/models/User');
 const { tokenize } = require('../../lib/utils/token');
 
 describe('User model', () => {
-  beforeEach(done => {
-    return mongoose.connection.dropDatabase(done);
-  });
-  afterAll(done => {
-    mongoose.connection.close(done);
-  });
-
-
   it('validates a good model', () => {
     const user = new User({
       username: 'Bill',

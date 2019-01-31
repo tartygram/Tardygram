@@ -1,11 +1,6 @@
-require('dotenv').config();
-require('../../lib/utils/connect')();
-const mongoose = require('mongoose');
+require('../dataHelper');
 const Post = require('../../lib/models/Post');
 describe('post model', () => {
-  afterAll(done => {
-    mongoose.connection.close(done);
-  });
 
   it('validates a good post model', () => {
     const post = {
