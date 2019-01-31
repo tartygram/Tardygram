@@ -39,6 +39,10 @@ describe('Post model', () => {
         expect(res.body).toHaveLength(5);
       });
   });
+
+
+
+
   it('can get a post by id', () => {
     return getPost()
       .then(post => {
@@ -46,6 +50,7 @@ describe('Post model', () => {
           .get(`/posts/${post._id}`);
       })
       .then(res => {
+        console.log('HELLO AARON', res.body);
         expect(res.body).toEqual({ 
           user: expect.any(String),
           photoUrl: 'string',
@@ -56,6 +61,10 @@ describe('Post model', () => {
         });
       });
   });
+
+
+
+
   it('can patch a post', () => {
     return getPost()
       .then(post => {
@@ -81,7 +90,7 @@ describe('Post model', () => {
       .then(post => {
         return request(app)
           .delete(`/posts/${post._id}`)
-          .set('Authorization', `Bearer ${getToken()}`)
+          .set('Authorization', `Bearer ${getToken()}`);
 
       })
       .then(res => {
