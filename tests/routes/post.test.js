@@ -6,7 +6,7 @@ const Post = require('../../lib/models/Post');
 const User = require('../../lib/models/User');
 const request = require('supertest');
 const app = require('../../lib/app');
-const { getToken } = require('../dataHelper');
+const { getToken, getPost } = require('../dataHelper');
 
 const createUser = (username, password, profilePhotoUrl) => {
   return User
@@ -28,12 +28,6 @@ const createPost = (username) => {
 };
 
 describe('Post model', () => {
-  beforeEach(done => {
-    return mongoose.connection.dropDatabase(done);
-  });
-  afterAll(done => {
-    mongoose.connection.close(done);
-  });
 
   it('can post a post', () => {
     return request(app)
@@ -57,18 +51,15 @@ describe('Post model', () => {
   });
 
   it('get a list of posts', () => {
-    return Promise.all(['billybob1', 'billybob2', 'Bill'].map(createPost))
-      .then(() => {
-        return request(app)
-          .get('/posts')
-          .set('Authorization', `Bearer ${getToken()}`);
-      })
+    return request(app)
+      .get('/posts')
+      .set('Authorization', `Bearer ${getToken()}`)
       .then(res => {
-        expect(res.body).toHaveLength(3);
+        expect(res.body).toHaveLength(5);
       });
   });
   it('can get a post by id', () => {
-    return createPost('billybob')
+    return getPost()
       .then(post => {
         // console.log('POST', post);
         return request(app)
@@ -78,11 +69,14 @@ describe('Post model', () => {
         expect(res.body).toEqual({ 
           user: expect.any(String),
           photoUrl: 'string',
-          caption: 'string',
+          caption: expect.any(String),
           tags: ['tag1', 'tag2', 'tag3'],
           __v: 0,
           _id: expect.any(String)
         });
       });
+  });
+  it('can patch a post', () => {
+
   });
 });
