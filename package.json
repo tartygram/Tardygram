@@ -30,7 +30,8 @@
   "homepage": "https://github.com/tartygram/Tardygram#readme",
   "devDependencies": {
     "eslint": "^5.12.1",
-    "jest": "^24.0.0"
+    "jest": "^24.0.0",
+    "supertest": "^3.4.2"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

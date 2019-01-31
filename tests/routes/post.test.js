@@ -11,8 +11,20 @@ const createUser = (username, password, profilePhotoUrl) => {
   return User
     .create({ username, password, profilePhotoUrl })
     .then(user => ({ ...user, _id: user._id.toString() }));
-  
 };
+
+// const createPost = (username, photoUrl, caption, tags) => {
+//   return createUser(username, 'password', 'string')
+//     .then(user => {
+//       return Post({ 
+//         username: user._id,
+//         photoUrl: 'string',
+//         caption: 'string',
+//         tags: ['tag1', 'tag2', 'tag3']
+//       })
+//         .then(post => ({ ...post, _id: post._id.toString() })); 
+//     });
+// };
 
 describe('Post model', () => {
   beforeEach(done => {
@@ -22,7 +34,7 @@ describe('Post model', () => {
     mongoose.connection.close(done);
   });
 
-  it('validates a good Post model', () => {
+  it('can post', () => {
     return createUser('Bill', 'password', 'string')
       .then(user => {
         return request(app)
@@ -34,6 +46,7 @@ describe('Post model', () => {
             tags: ['tag1', 'tag2', 'tag3']
           })
           .then(res => {
+            console.log(res.body);
             expect(res.body).toEqual({
               username: expect.any(String),
               caption: 'Great Post',
