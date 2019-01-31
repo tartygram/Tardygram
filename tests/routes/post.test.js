@@ -77,6 +77,32 @@ describe('Post model', () => {
       });
   });
   it('can patch a post', () => {
+    return getPost()
+      .then(post => {
+        return request(app)
+          .patch(`/posts/${post._id}`)
+          .send({ caption: 'HELLO PEOPLE' });
+      })
+      .then(res => {
+        expect(res.body).toEqual({ 
+          user: expect.any(String),
+          photoUrl: 'string',
+          caption: 'HELLO PEOPLE',
+          tags: ['tag1', 'tag2', 'tag3'],
+          __v: 0,
+          _id: expect.any(String)
+        });
 
+      });
+  });
+  it('can delete by id', () => {
+    return getPost()
+      .then(post => {
+        return request(app)
+          .delete(`/posts/${post._id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({ deleted: 1 });
+      });
   });
 });
