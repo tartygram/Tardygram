@@ -1,14 +1,24 @@
 const Post = require('../lib/models/Post');
 const User = require('../lib/models/User');
+const Comment = require('../lib/models/Comment');
 const Chance = require('chance');
 const chance = new Chance();
 
 const DEFAULT_TOTAL_USERS = 10;
-const DEFAULT_TOTAL_POSTS = 1000;
+const DEFAULT_TOTAL_POSTS = 100;
+const DEFAULT_TOTAL_COMMENTS = 110;
 
-module.exports = ({ totalUsers = DEFAULT_TOTAL_USERS, totalPosts = DEFAULT_TOTAL_POSTS }) => {
+module.exports = ({
+  totalUsers = DEFAULT_TOTAL_USERS,
+  totalPosts = DEFAULT_TOTAL_POSTS,
+  totalComments = DEFAULT_TOTAL_COMMENTS
+}) => {
   return Promise.all(
-    [...Array(totalUsers)].map((ele, i) => User.create({ username: `Bill${i}`, password: 'password', profilePhotoUrl: 'string' }))
+    [...Array(totalUsers)].map((ele, i) => User.create({
+      username: `Bill${i}`,
+      password: 'password',
+      profilePhotoUrl: 'string'
+    }))
   )
     .then(users => {
       return Promise.all(
@@ -21,5 +31,16 @@ module.exports = ({ totalUsers = DEFAULT_TOTAL_USERS, totalPosts = DEFAULT_TOTAL
           });
         })
       );
-    });
+    })
+    .then(posts => {
+      return Promise.all(
+        [...Array(totalComments)].map(() => {
+          return Comment.create({
+            commentBy: chance.pickone(users)._id,
+            post: chance.pickone(posts)._id,
+            comment: 'Nice Photo',
+          })
+        })
+      )
+    })
 };
