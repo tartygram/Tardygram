@@ -50,14 +50,14 @@ describe('Post model', () => {
           .get(`/posts/${post._id}`);
       })
       .then(res => {
-        console.log('HELLO AARON', res.body);
         expect(res.body).toEqual({ 
           user: expect.any(String),
           photoUrl: 'string',
           caption: expect.any(String),
           tags: ['tag1', 'tag2', 'tag3'],
           __v: 0,
-          _id: expect.any(String)
+          _id: expect.any(String),
+          comments: expect.any(Array)
         });
       });
   });
