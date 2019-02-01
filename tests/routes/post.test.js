@@ -97,4 +97,12 @@ describe('Post model', () => {
         expect(res.body).toEqual({ deleted: 1 });
       });
   });
+  it('can get the top ten posts', () => {
+    return request(app)
+      .get('/posts/popular')
+      .set('Authorization', `Bearer ${getToken()}`)
+      .then(res => {
+        expect(res.body).toHaveLength(10);
+      });
+  });
 });
